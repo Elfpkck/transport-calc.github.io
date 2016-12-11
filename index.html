@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Калькулятор стоимости проезда в метро Киева и Санкт-Петербурга</title>
+    <meta name="Keywords" content="калькулятор, стоимость, расчет, посчитать, скидки, проезд, поездка, метро, метрополитен, Киев, Київ, Санкт-Петербург, Питер, СПб, Петербургский, 10, десять, подорожник, единый электронный билет, БСК, БЭПК, проїзд, поїздки, метрополітен, порахувати, розрахунок, вартість">
+    <meta name="Description" content="Расчет стоимости проезда в метро за месяц, если цена снижается через каждые 10 поездок.">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+    <script src="/js/ajax_feedback.js"></script>
+    <script src="js/trips.js"></script>
+    <script src="js/google_analytics.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 col-md-4 col-lg-4"></div>
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" style="padding:0.5%;">
+                <div class="panel panel-primary" style="padding:3%;">
+                    <button class="btn btn-link btn-block btn-xs" data-toggle="collapse" data-target="#hide-me3"><div align="right">?</div></button>
+                        <div id="hide-me3" class="collapse"><br>
+                            <div align="justify">Расчет стоимости проезда в метро за месяц, если цена снижается через каждые 10 поездок.</div><br>
+                        </div>
+                    <form role="form">
+                        <b>Город:</b>
+                        <div class="radio">
+                         <label class="checkbox-inline">
+                             <input type="radio" name="city" value="kiev">
+                             Киев
+                         </label>
+                         <label class="checkbox-inline">
+                             <input type="radio" name="city" value="spb">
+                             Санкт-Петербург
+                         </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="trips">Количество поездок в месяц</label>
+                            <input type="number" id="trips" class="form-control" min="0" data-bind="value:trips" placeholder="Введите количество поездок в месяц">
+                        </div>
+                    </form><hr><br><br>
+
+                    <h2><div id="target" align="center"></div></h2><br>
+
+                    <button id="hider" class="btn btn-primary btn-block" data-toggle="collapse" data-target="#hide-me">Обратная связь</button>
+                    <div id="hide-me" class="collapse">
+                          <br>
+                        <form role="form" id="feedback_form" method="POST">
+                            <div class="form-group">
+                                <label for="name">Ваше имя</label>
+                                <input required type="text" class="form-control" id="name" name="Name" placeholder="Введите имя">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Ваша электронная почта</label>
+                                <input required type="email" class="form-control" id="email" name="Email" placeholder="Введите email">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Текст сообщения</label>
+                                <textarea required rows="15" class="form-control" id="message" name="Message" placeholder="Введите текст сообщения"></textarea>
+                            </div>
+                            <input type="text" name="_gotcha" style="display:none">
+                            <button type="submit" class="btn btn-primary" value="Send">Отправить</button>
+                        </form>
+                        <script>
+                            var feedback_form = document.getElementById('feedback_form');
+                            feedback_form.setAttribute('action', 'https://formspree.io/' + 'sub.python' + '@' + 'gmail' + '.' + 'com');
+                        </script>
+                    </div>
+
+                    <div id="target_feedback" align="center" hidden><font color="green"><br>Email was successfully sent</font></div><br>
+
+                    <button class="btn btn-primary btn-block" data-toggle="collapse" data-target="#hide-me2">Источники информации</button>
+                    <div id="hide-me2" class="collapse"><br>
+                        <ul>
+                            <li><a href="http://www.metro.kiev.ua/node/106#2" target="_blank">Киевский метрополитен</a></li>
+                            <li><a href="http://www.metro.spb.ru/cnblt2.html" target="_blank">Петербургский метрополитен. Единый электронный билет ("Подорожник")</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 col-md-4 col-lg-5"></div>
+        </div>
+    </div>
+</body>
+</html>
