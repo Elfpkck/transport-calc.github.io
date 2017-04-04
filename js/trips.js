@@ -1,52 +1,42 @@
-function calculateSPB(a) {
-    var currency = "руб."
+function calculateCity(trips, price, reducer, limit, kiev) {
     var res
-    if (a >= 1 && a <= 10) {
-        res = a * 34;
-    } else if (a >= 11 && a <= 20) {
-        res = 340 + (a - 10) * 33;
-    } else if (a >= 21 && a <= 30) {
-        res = 340 + 330 + (a - 20) * 32;
-    } else if (a >= 31 && a <= 40) {
-        res = 340 + 330 + 320 + (a - 30) * 31;
-    } else if (a >= 41) {
-        res = 340 + 330 + 320 + 310 + (a - 40) * 30;
-    } else if (a == "") {
-        res = "";
-        currency = '';
-    } else {
-        res = "Некорректные данные";
-        currency = '';
-    }
-    return {
-        result: res,
-        currency: currency
-    };
-}
+    var currency
 
-function calculateKiev(a) {
-    var currency = "грн."
-    if (a >= 1 && a <= 9) {
-        res = a * 4;
-    } else if (a >= 10 && a <= 19) {
-        res = 9 * 4 + (a - 9) * 3.9;
-    } else if (a >= 20 && a <= 29) {
-        res = 9 * 4 + 10 * 3.9 + (a - 19) * 3.8;
-    } else if (a >= 30 && a <= 39) {
-        res = 9 * 4 + 10 * 3.9 + 10 * 3.8 + (a - 29) * 3.7;
-    } else if (a >= 40 && a <= 49) {
-        res = 9 * 4 + 10 * 3.9 + 10 * 3.8 + 10 * 3.7 + (a - 39) * 3.6;
-    } else if (a >= 50) {
-        res = 9 * 4 + 10 * 3.9 + 10 * 3.8 + 10 * 3.7 + 10 * 3.6 + (a - 49) * 3.5;
-    } else if (a == "") {
-        res = "";
-        currency = '';
-    } else {
-        res = "Некорректные данные";
+    if (trips == '') {
+        res = '';
         currency = '';
     }
+    else if ((Number(trips) < 1) || (Number(trips) % 1 !== 0)) {
+        res = "Некорректные данные";
+        currency = "";
+    }
+    else {
+        if (kiev) {currency = "грн."} else {currency = "руб."}
+
+        var i
+        var res = 0;
+        var step = 0;
+
+        while (step < limit) {
+            if (kiev) {
+                i = 9;
+                kiev = false;
+            }
+            else {
+                i = 10;
+            }
+
+            if (trips <= step + i && trips > step) {break;}
+
+            step += i;
+            res += price * i;
+            price -= reducer;
+        }
+        res = res + (trips - step) * price
+    }
+
     return {
-        result: res,
+        res: res,
         currency: currency
     };
 }
@@ -59,20 +49,21 @@ function calculateTrips() {
     if ($("form input[name='city']").is(':checked')) {
         var a = $("form input[id='trips']").val();
         var radio_btn = $("form input[name='city']:checked").val();
+
         if (radio_btn == "spb") {
-            var results = calculateSPB(a);
-            var res = results.result;
-            var currency = results.currency;
+            var results = calculateCity(a, 36, 1, 40, false);
         } else if (radio_btn == "kiev") {
-            var results = calculateKiev(a);
-            var res = results.result;
-            var currency = results.currency;
+            var results = calculateCity(a, 4, 0.1, 49, true);
         }
+        var res = results.res;
+        var currency = results.currency;
+
         if (Number(res) === res && res % 1 !== 0) {
             res = res.toFixed(2);
             res = res.toString().replace(".", ",");
         }
     }
+
     $("#target").empty();
     $("#target").prepend(res + ' ' + currency);
 }
@@ -80,4 +71,13 @@ function calculateTrips() {
 $(document).ready(function () {
     $("form input[name='city']").on('change', calculateTrips);
     $("form input[id='trips']").on('input', calculateTrips);
+
+    //disable form submit on enter
+    $("form input[id='trips']").on('keyup keypress', function(e) {
+        var keyCode = e.keyCode || e.which;
+        if (keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    })
 });
