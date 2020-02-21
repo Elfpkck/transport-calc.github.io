@@ -51,9 +51,9 @@ function calculateTrips() {
         var radio_btn = $("form input[name='city']:checked").val();
 
         if (radio_btn == "spb") {
-            var results = calculateCity(a, 36, 1, 40, false);
+            var results = calculateCity(a, 38, 1, 40, false);
         } else if (radio_btn == "kiev") {
-            var results = calculateCity(a, 4, 0.1, 49, true);
+            var results = calculateCity(a, 8, 0.3, 49, true);
         }
         var res = results.res;
         var currency = results.currency;
